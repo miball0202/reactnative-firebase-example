@@ -39,6 +39,13 @@ const PostItem = (props: Props) => {
     });
   }, [currentUser, loadPosts, post.id]);
 
+  const handleClickItemRow = useCallback(() => {
+    if (!post.id) {
+      return;
+    }
+    navigation.navigate('PostDetail', { id: post.id });
+  }, [navigation, post.id]);
+
   return (
     <SwipeRow disableRightSwipe rightOpenValue={-100} stopRightSwipe={-100}>
       <Box flex={1} alignItems="flex-end">
@@ -49,15 +56,7 @@ const PostItem = (props: Props) => {
           />
         </Center>
       </Box>
-      <TouchableHighlight
-        onPress={() => {
-          if (!post.id) {
-            return;
-          }
-          navigation.navigate('PostDetail', { id: post.id });
-        }}
-        activeOpacity={0.8}
-      >
+      <TouchableHighlight onPress={handleClickItemRow} activeOpacity={0.8}>
         <Box bg="white" borderWidth="1" borderColor="coolGray.200" p="3">
           <VStack space={1}>
             <Text>{timestampToDateLocaleString(post.updatedAt)}</Text>
