@@ -2,9 +2,15 @@ import React from 'react';
 import PostItem from 'src/screens/home/post/ListScreen/components/PostItem';
 import { Timestamp } from 'firebase/firestore';
 import { Post } from 'src/types/post';
-import { NativeBaseProvider } from 'native-base';
-import { configure, shallow } from 'enzyme';
+import { NativeBaseProvider, Text } from 'native-base';
+import { configure, render, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { create } from 'react-test-renderer';
+
+const inset = {
+  frame: { x: 0, y: 0, width: 0, height: 0 },
+  insets: { top: 0, left: 0, right: 0, bottom: 0 },
+};
 
 configure({ adapter: new Adapter() });
 
@@ -43,13 +49,20 @@ describe('PostItem', () => {
       createdAt: timestamp,
       updatedAt: timestamp,
     };
-    const wrapper = shallow(
-      <NativeBaseProvider>
-        <PostItem post={dummyPost} />
-      </NativeBaseProvider>,
-    );
 
-    const dateString = wrapper.find('Text').first();
-    expect(dateString).toEqual('');
+    const tree = create(
+      <NativeBaseProvider initialWindowMetrics={inset}>
+        <PostItem post={dummyPost} />
+      </NativeBaseProvider>
+    ).root
+
+    console.log(tree.children)
+    const textHasTitle = tree.findAllByProps({value: 'title'})
+    const textHasBody = tree.findAllByProps({value: 'body'})
+
+    console.log(textHasTitle)
+
+    expect(textHasTitle.length).toBe(1);
+    expect(textHasBody.length).toBe(1);
   });
 });
