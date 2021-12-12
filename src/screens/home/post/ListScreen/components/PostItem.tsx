@@ -26,7 +26,14 @@ const PostItem = (props: Props) => {
   const { loadPosts } = usePosts();
   const navigation = useNavigation<NavigationProp['navigation']>();
 
-  const deleteUserPost = useCallback(() => {
+  const handlePressItem = useCallback(() => {
+    if (!post.id) {
+      return;
+    }
+    navigation.navigate('PostDetail', { id: post.id });
+  }, [navigation, post.id]);
+
+  const handlePressDeleteIcon = useCallback(() => {
     if (!currentUser?.uid) {
       return;
     }
@@ -45,19 +52,11 @@ const PostItem = (props: Props) => {
         <Center bg="red.500" h="100%" w={100}>
           <IconButton
             icon={<Icon as={MaterialIcons} name={'delete'} color="white" />}
-            onPress={deleteUserPost}
+            onPress={handlePressDeleteIcon}
           />
         </Center>
       </Box>
-      <TouchableHighlight
-        onPress={() => {
-          if (!post.id) {
-            return;
-          }
-          navigation.navigate('PostDetail', { id: post.id });
-        }}
-        activeOpacity={0.8}
-      >
+      <TouchableHighlight onPress={handlePressItem} activeOpacity={0.8}>
         <Box bg="white" borderWidth="1" borderColor="coolGray.200" p="3">
           <VStack space={1}>
             <Text>{timestampToDateLocaleString(post.updatedAt)}</Text>

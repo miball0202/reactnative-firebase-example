@@ -27,7 +27,7 @@ const ListScreen = () => {
     setIsLoading(true);
     loadPosts(currentUser.uid).then(() => setIsLoading(false));
   }, [currentUser, loadPosts]);
-  const addNewPost = useCallback(() => {
+  const handlePressAddIcon = useCallback(() => {
     if (!currentUser) {
       return;
     }
@@ -58,7 +58,7 @@ const ListScreen = () => {
         icon={<Icon color="white" as={MaterialIcons} name="add" />}
         bottom={60}
         renderInPortal={false}
-        onPress={addNewPost}
+        onPress={handlePressAddIcon}
         colorScheme="indigo"
       />
     </Box>

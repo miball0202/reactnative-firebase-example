@@ -33,6 +33,7 @@ const LoginScreen = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleIsVisible = useCallback(() => setIsVisible(prev => !prev), []);
+
   const showSuccessToast = useCallback(() => {
     toast.show({
       title: 'Succeeded to Login!',
@@ -40,6 +41,7 @@ const LoginScreen = () => {
       placement: 'top',
     });
   }, [toast]);
+
   const showErrorToast = useCallback(() => {
     toast.show({
       title: 'Failed to login',
@@ -48,7 +50,8 @@ const LoginScreen = () => {
       placement: 'top',
     });
   }, [toast]);
-  const requestLogin = useCallback(() => {
+
+  const handlePressLoginButton = useCallback(() => {
     setIsLoading(true);
     login(email, password)
       .then(showSuccessToast)
@@ -57,6 +60,10 @@ const LoginScreen = () => {
         setIsLoading(false);
       });
   }, [email, password, showSuccessToast, showErrorToast]);
+
+  const handlePressSingUpText = useCallback(() => {
+    navigation.navigate('SignUp');
+  }, [navigation]);
 
   useEffect(() => {
     return () => {
@@ -111,7 +118,7 @@ const LoginScreen = () => {
                   }
                 />
                 <Button
-                  onPress={requestLogin}
+                  onPress={handlePressLoginButton}
                   colorScheme="indigo"
                   isLoading={isLoading}
                 >
@@ -131,9 +138,7 @@ const LoginScreen = () => {
                   textDecoration: 'none',
                   fontSize: 'md',
                 }}
-                onPress={() => {
-                  navigation.navigate('SignUp');
-                }}
+                onPress={handlePressSingUpText}
               >
                 Sign up
               </Link>

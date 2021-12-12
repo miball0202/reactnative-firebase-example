@@ -20,18 +20,21 @@ const DetailScreen = () => {
     body: '',
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const updatePost = (key: string, value: string) => {
+
+  const handleChangePostText = useCallback((key: string, value: string) => {
     setPost(prev => ({
       ...prev,
       [key]: value,
     }));
-  };
-  const saveUserPost = async () => {
+  }, []);
+
+  const handleBlurInput = useCallback(async () => {
     if (!currentUser) {
       return;
     }
     await savePost(currentUser.uid, params.id, post);
-  };
+  }, [currentUser, params.id, post]);
+
   const refreshPosts = useCallback(async () => {
     if (!currentUser) {
       return;
@@ -62,23 +65,23 @@ const DetailScreen = () => {
       <Input
         value={post.title}
         onChangeText={val => {
-          updatePost('title', val);
+          handleChangePostText('title', val);
         }}
         fontSize="md"
         fontWeight="bold"
         isDisabled={isLoading}
-        onBlur={saveUserPost}
+        onBlur={handleBlurInput}
       />
       <Input
         value={post.body}
         onChangeText={val => {
-          updatePost('body', val);
+          handleChangePostText('body', val);
         }}
         fontSize="md"
         minH={'100%'}
         multiline
         isDisabled={isLoading}
-        onBlur={saveUserPost}
+        onBlur={handleBlurInput}
       />
     </Box>
   );
